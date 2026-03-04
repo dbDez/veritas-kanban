@@ -420,16 +420,19 @@ Verify the MCP server config in your Claude Desktop settings:
 
 Build the MCP server first: `cd mcp && pnpm build`
 
-**After config changes, restart OpenClaw:**
+#### Troubleshooting Checklist
+
+**1. Restart OpenClaw after MCP config changes**
+
+MCP servers are discovered at startup. After adding or modifying the config, restart the OpenClaw gateway:
 
 ```bash
-# Restart the OpenClaw gateway to pick up new MCP servers
 openclaw gateway restart
 ```
 
-**Verify MCP discovery:**
+**2. Verify MCP discovery and tools after restart**
 
-Check that Veritas Kanban is discovered:
+Check that Veritas Kanban appears in the MCP server list:
 
 ```bash
 # List all discovered MCP servers
@@ -438,27 +441,31 @@ openclaw mcp list
 # Should show "veritas-kanban" with 26 tools
 ```
 
-**If MCP connection fails, gather diagnostics:**
+If the server doesn't appear, check the MCP server logs for errors (see diagnostics below).
+
+**3. Gather diagnostics bundle when reporting issues**
+
+If MCP connection fails, collect this information to share when [reporting an issue](https://github.com/BradGroux/veritas-kanban/issues):
 
 ```bash
-# 1. Check OpenClaw version
+# OpenClaw version
 openclaw --version
 
-# 2. Check VK version and health
+# Veritas Kanban version and health
 curl -s http://localhost:3001/api/health
 
-# 3. Check MCP server logs (location varies by platform)
+# MCP server logs (location varies by platform)
 # macOS/Linux:
 tail -n 50 ~/.openclaw/logs/mcp.log
 
 # Windows:
 Get-Content $env:USERPROFILE\.openclaw\logs\mcp.log -Tail 50
 
-# 4. Verify VK API is accessible
+# Verify VK API is accessible
 curl -s -H "X-API-Key: your-admin-key" http://localhost:3001/api/tasks
 ```
 
-Share this output when [reporting an issue](https://github.com/BradGroux/veritas-kanban/issues).
+Include the output of all commands above when reporting the issue.
 
 ---
 
