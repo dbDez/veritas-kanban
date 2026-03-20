@@ -58,6 +58,7 @@ import { taskRoutes } from './routes/tasks.js';
 import { taskCommentRoutes } from './routes/task-comments.js';
 import { taskSubtaskRoutes } from './routes/task-subtasks.js';
 import attachmentRoutes from './routes/attachments.js';
+import { webhookN8nRouter } from './routes/webhook-n8n.js';
 import { configRoutes } from './routes/config.js';
 import { agentRoutes } from './routes/agents.js';
 import { cspNonceMiddleware, cspNonceDirective } from './middleware/csp-nonce.js';
@@ -436,6 +437,9 @@ app.use('/api/auth', authRateLimit, authRoutes);
 // Applies to both /api/* and /api/v1/* (since /api/v1 starts with /api)
 // ============================================
 app.use('/api', apiRateLimit);
+
+// Unauthenticated webhook routes (registered BEFORE authenticate middleware)
+app.use('/api/webhook', webhookN8nRouter);
 
 // Apply authentication to all API routes (except /api/auth which is handled above)
 app.use('/api', authenticate);
