@@ -13,6 +13,7 @@ import { templatesApi, taskTypesApi, sprintsApi, activityApi, attachmentsApi } f
 import { timeApi, statusHistoryApi } from './time';
 import { chatApi } from './chat';
 import { decisionsApi } from './decisions';
+import { scoringApi } from './scoring';
 
 // Assemble the full API object (matches original structure exactly)
 export const api = {
@@ -36,6 +37,7 @@ export const api = {
   statusHistory: statusHistoryApi,
   chat: chatApi,
   decisions: decisionsApi,
+  scoring: scoringApi,
 };
 
 // Re-export managed list helper
