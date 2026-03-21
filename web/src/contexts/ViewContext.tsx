@@ -15,7 +15,8 @@ export type AppView =
   | 'archive'
   | 'templates'
   | 'workflows'
-  | 'policies';
+  | 'policies'
+  | 'scoring';
 
 const basePath = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
@@ -27,6 +28,7 @@ const VIEW_PATHS: Record<AppView, string> = {
   templates: '/templates',
   workflows: '/workflows',
   policies: '/policies',
+  scoring: '/scoring',
 };
 
 function normalizeAppPath(pathname: string): string {

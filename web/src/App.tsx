@@ -48,6 +48,12 @@ const WorkflowsPage = lazy(() =>
   }))
 );
 
+const ScoringProfiles = lazy(() =>
+  import('./components/scoring/ScoringProfiles').then((mod) => ({
+    default: mod.ScoringProfiles,
+  }))
+);
+
 const PolicyManager = lazy(() =>
   import('./components/policies/PolicyManager').then((mod) => ({
     default: mod.PolicyManager,
@@ -127,6 +133,20 @@ function MainContent() {
         }
       >
         <WorkflowsPage onBack={() => setView('board')} />
+      </Suspense>
+    );
+  }
+
+  if (view === 'scoring') {
+    return (
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center py-16">
+            <span className="text-muted-foreground">Loading scoring…</span>
+          </div>
+        }
+      >
+        <ScoringProfiles onBack={() => setView('board')} />
       </Suspense>
     );
   }
