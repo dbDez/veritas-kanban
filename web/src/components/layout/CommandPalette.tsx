@@ -13,6 +13,7 @@ import {
   Moon,
   Sun,
   Keyboard,
+  Activity,
   GitBranch,
 } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
@@ -85,6 +86,14 @@ export function CommandPalette() {
         category: 'Navigation',
         action: () => setView('backlog'),
         keywords: ['someday', 'maybe', 'later'],
+      },
+      {
+        id: 'go-drift',
+        label: 'Go to Drift Monitor',
+        icon: <Activity className="h-4 w-4" />,
+        category: 'Navigation',
+        action: () => setView('drift'),
+        keywords: ['behavior', 'anomaly', 'z-score', 'alerts'],
       },
       {
         id: 'go-archive',

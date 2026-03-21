@@ -48,6 +48,12 @@ const WorkflowsPage = lazy(() =>
   }))
 );
 
+const DriftMonitor = lazy(() =>
+  import('./components/drift/DriftMonitor').then((mod) => ({
+    default: mod.DriftMonitor,
+  }))
+);
+
 const DecisionExplorer = lazy(() =>
   import('./components/decisions/DecisionExplorer').then((mod) => ({
     default: mod.DecisionExplorer,
@@ -139,6 +145,20 @@ function MainContent() {
         }
       >
         <WorkflowsPage onBack={() => setView('board')} />
+      </Suspense>
+    );
+  }
+
+  if (view === 'drift') {
+    return (
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center py-16">
+            <span className="text-muted-foreground">Loading drift monitor…</span>
+          </div>
+        }
+      >
+        <DriftMonitor onBack={() => setView('board')} />
       </Suspense>
     );
   }

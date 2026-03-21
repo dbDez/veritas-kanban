@@ -10,6 +10,7 @@ import {
   FileText,
   Users,
   Workflow,
+  Activity,
   GitBranch,
   Scale,
   ShieldAlert,
@@ -130,6 +131,15 @@ export function Header() {
               title="Workflows"
             >
               <Workflow className="h-4 w-4" aria-hidden="true" />
+            </Button>
+            <Button
+              variant={view === 'drift' ? 'secondary' : 'ghost'}
+              size="icon"
+              onClick={() => setView(view === 'drift' ? 'board' : 'drift')}
+              aria-label="Drift Monitor"
+              title="Drift Monitor"
+            >
+              <Activity className="h-4 w-4" aria-hidden="true" />
             </Button>
             <Button
               variant={view === 'decisions' ? 'secondary' : 'ghost'}

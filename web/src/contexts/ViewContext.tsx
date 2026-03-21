@@ -16,6 +16,7 @@ export type AppView =
   | 'templates'
   | 'workflows'
   | 'policies'
+  | 'drift'
   | 'decisions'
   | 'scoring';
 
@@ -29,6 +30,7 @@ const VIEW_PATHS: Record<AppView, string> = {
   templates: '/templates',
   workflows: '/workflows',
   policies: '/policies',
+  drift: '/drift',
   decisions: '/decisions',
   scoring: '/scoring',
 };
