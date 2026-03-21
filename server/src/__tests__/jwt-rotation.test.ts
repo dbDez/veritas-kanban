@@ -5,7 +5,28 @@ import jwt from 'jsonwebtoken';
 // vi.hoisted runs before vi.mock hoisting — makes mockFs available to the mock factory
 const mockFs: Record<string, string> = vi.hoisted(() => ({}));
 
+vi.mock('node:fs/promises', () => {
+  const access = vi.fn().mockResolvedValue(undefined);
+  return {
+    access,
+    default: { access },
+  };
+});
+
 vi.mock('fs', () => {
+  const mockPromises = {
+    readFile: vi.fn((path: string) => {
+      if (path in mockFs) return Promise.resolve(mockFs[path]);
+      return Promise.reject(new Error(`ENOENT: ${path}`));
+    }),
+    writeFile: vi.fn((path: string, data: string) => {
+      mockFs[path] = data;
+      return Promise.resolve(undefined);
+    }),
+    mkdir: vi.fn().mockResolvedValue(undefined),
+    readdir: vi.fn().mockResolvedValue([]),
+    unlink: vi.fn().mockResolvedValue(undefined),
+  };
   const impl = {
     existsSync: (path: string) => path in mockFs,
     readFileSync: (path: string) => {
@@ -20,6 +41,7 @@ vi.mock('fs', () => {
       delete mockFs[from];
     },
     mkdirSync: () => {},
+    promises: mockPromises,
   };
   return { ...impl, default: impl };
 });
