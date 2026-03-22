@@ -18,7 +18,7 @@
     "build": "pnpm --filter shared build && pnpm --filter server build && pnpm --filter web build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "pnpm -r typecheck",
+    "typecheck": "pnpm --filter @veritas-kanban/shared build && pnpm -r typecheck",
     "test": "vitest run",
     "test:unit": "pnpm -r --workspace-concurrency=1 test",
     "test:e2e": "playwright test",
