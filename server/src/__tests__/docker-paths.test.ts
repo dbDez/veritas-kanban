@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+import { platform } from 'os';
 
 vi.mock('node:fs/promises', () => {
   const mod = {
@@ -41,7 +42,7 @@ vi.mock('node:fs', () => {
   };
 });
 
-describe('paths: Docker DATA_DIR support', () => {
+describe.skipIf(platform() === 'win32')('paths: Docker DATA_DIR support', () => {
   const originalEnv = { ...process.env };
 
   beforeEach(() => {

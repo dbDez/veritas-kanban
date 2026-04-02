@@ -122,7 +122,7 @@ describe('integrity-service', () => {
 
       const backupPath = await createBackup(dataDir);
       expect(backupPath).toBeTruthy();
-      expect(backupPath).toContain('backups/backup-');
+      expect(backupPath).toContain(path.join('backups', 'backup-'));
 
       // Verify backup content
       const backupConfig = await fs.readFile(path.join(backupPath, 'config.json'), 'utf-8');
