@@ -178,53 +178,53 @@ export function TaskDetailPanel({
           onValueChange={setActiveTab}
           className="flex-1 flex flex-col overflow-hidden mt-3"
         >
-          <TabsList
-            className={`grid w-full flex-shrink-0 ${isCodeTask ? (taskSettings.enableAttachments ? 'grid-cols-9' : 'grid-cols-8') : taskSettings.enableAttachments ? 'grid-cols-5' : 'grid-cols-4'}`}
-          >
-            <TabsTrigger value="details">Details</TabsTrigger>
-            <TabsTrigger value="progress" className="flex items-center gap-1">
-              <NotebookPen className="h-3 w-3" />
-              Progress
-            </TabsTrigger>
-            <TabsTrigger value="observations" className="flex items-center gap-1">
-              <Eye className="h-3 w-3" />
-              Observations
-            </TabsTrigger>
-            {taskSettings.enableAttachments && (
-              <TabsTrigger value="attachments" className="flex items-center gap-1">
-                <Paperclip className="h-3 w-3" />
-                Attachments
+          <div className="w-full flex-shrink-0 overflow-x-auto">
+            <TabsList className="flex w-max min-w-full h-8">
+              <TabsTrigger value="details">Details</TabsTrigger>
+              <TabsTrigger value="progress" className="flex items-center gap-1">
+                <NotebookPen className="h-3 w-3" />
+                Progress
               </TabsTrigger>
-            )}
-            {isCodeTask && (
-              <>
-                <TabsTrigger value="git" className="flex items-center gap-1">
-                  <GitBranch className="h-3 w-3" />
-                  Git
+              <TabsTrigger value="observations" className="flex items-center gap-1">
+                <Eye className="h-3 w-3" />
+                Observations
+              </TabsTrigger>
+              {taskSettings.enableAttachments && (
+                <TabsTrigger value="attachments" className="flex items-center gap-1">
+                  <Paperclip className="h-3 w-3" />
+                  Attachments
                 </TabsTrigger>
-                <TabsTrigger value="agent" className="flex items-center gap-1">
-                  <Bot className="h-3 w-3" />
-                  Agent
-                </TabsTrigger>
-                <TabsTrigger
-                  value="changes"
-                  disabled={!hasWorktree}
-                  className="flex items-center gap-1"
-                >
-                  <FileDiff className="h-3 w-3" />
-                  Changes
-                </TabsTrigger>
-                <TabsTrigger value="review" className="flex items-center gap-1">
-                  <ClipboardCheck className="h-3 w-3" />
-                  Review
-                </TabsTrigger>
-              </>
-            )}
-            <TabsTrigger value="metrics" className="flex items-center gap-1">
-              <BarChart3 className="h-3 w-3" />
-              Metrics
-            </TabsTrigger>
-          </TabsList>
+              )}
+              {isCodeTask && (
+                <>
+                  <TabsTrigger value="git" className="flex items-center gap-1">
+                    <GitBranch className="h-3 w-3" />
+                    Git
+                  </TabsTrigger>
+                  <TabsTrigger value="agent" className="flex items-center gap-1">
+                    <Bot className="h-3 w-3" />
+                    Agent
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="changes"
+                    disabled={!hasWorktree}
+                    className="flex items-center gap-1"
+                  >
+                    <FileDiff className="h-3 w-3" />
+                    Changes
+                  </TabsTrigger>
+                  <TabsTrigger value="review" className="flex items-center gap-1">
+                    <ClipboardCheck className="h-3 w-3" />
+                    Review
+                  </TabsTrigger>
+                </>
+              )}
+              <TabsTrigger value="metrics" className="flex items-center gap-1">
+                <BarChart3 className="h-3 w-3" />
+                Metrics
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <div className="flex-1 overflow-y-auto mt-4">
             {/* Details Tab */}
