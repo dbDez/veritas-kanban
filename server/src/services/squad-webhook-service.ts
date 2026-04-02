@@ -53,27 +53,27 @@ export async function fireSquadWebhook(
   }
 
   // Route based on mode
-  if (settings.mode === 'openclaw') {
-    await fireOpenClawWake(message, settings);
+  if (settings.mode === 'claude') {
+    await fireClaudeGatewayWake(message, settings);
   } else {
     await fireGenericWebhook(message, settings, isHuman);
   }
 }
 
 /**
- * Fire an OpenClaw gateway wake call
+ * Fire a Claude gateway wake call
  */
-async function fireOpenClawWake(
+async function fireClaudeGatewayWake(
   message: SquadMessage,
   settings: SquadWebhookSettings
 ): Promise<void> {
-  if (!settings.openclawGatewayUrl || !settings.openclawGatewayToken) {
-    log.warn('OpenClaw mode enabled but gatewayUrl or gatewayToken missing');
+  if (!settings.claudeGatewayUrl || !settings.claudeGatewayToken) {
+    log.warn('Claude mode enabled but gatewayUrl or gatewayToken missing');
     return;
   }
 
   const displayName = message.displayName || message.agent;
-  const wakeText = `🗨️ Squad chat from ${displayName}: ${message.message}`;
+  const wakeText = `Squad chat from ${displayName}: ${message.message}`;
 
   const payload = {
     tool: 'cron',
@@ -84,7 +84,7 @@ async function fireOpenClawWake(
     },
   };
 
-  const url = `${settings.openclawGatewayUrl}/tools/invoke`;
+  const url = `${settings.claudeGatewayUrl}/tools/invoke`;
 
   // Validate URL to prevent SSRF attacks
   const validation = validateWebhookUrl(url);
@@ -101,7 +101,7 @@ async function fireOpenClawWake(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${settings.openclawGatewayToken}`,
+        Authorization: `Bearer ${settings.claudeGatewayToken}`,
       },
       body: JSON.stringify(payload),
       signal: controller.signal,
@@ -112,17 +112,17 @@ async function fireOpenClawWake(
     if (!response.ok) {
       log.warn(
         { status: response.status, statusText: response.statusText, url },
-        'OpenClaw wake call returned non-2xx status'
+        'Claude gateway wake call returned non-2xx status'
       );
       return;
     }
 
-    log.info({ messageId: message.id, displayName }, 'OpenClaw wake call fired successfully');
+    log.info({ messageId: message.id, displayName }, 'Claude gateway wake call fired successfully');
   } catch (err: any) {
     if (err.name === 'AbortError') {
-      log.warn({ url }, 'OpenClaw wake call timed out after 5 seconds');
+      log.warn({ url }, 'Claude gateway wake call timed out after 5 seconds');
     } else {
-      log.error({ err: err.message, url }, 'OpenClaw wake call failed');
+      log.error({ err: err.message, url }, 'Claude gateway wake call failed');
     }
   }
 }

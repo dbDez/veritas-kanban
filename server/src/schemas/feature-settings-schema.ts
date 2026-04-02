@@ -202,13 +202,13 @@ const DocFreshnessSettingsSchema = z
 const SquadWebhookSettingsSchema = z
   .object({
     enabled: z.boolean().optional(),
-    mode: z.enum(['webhook', 'openclaw']).optional(),
+    mode: z.enum(['webhook', 'claude']).optional(),
     // Generic webhook fields
     url: z.string().url().max(500).optional(),
     secret: z.string().min(16).max(128).optional(),
-    // OpenClaw fields
-    openclawGatewayUrl: z.string().url().max(500).optional(),
-    openclawGatewayToken: z.string().min(16).max(128).optional(),
+    // Claude Gateway fields
+    claudeGatewayUrl: z.string().url().max(500).optional(),
+    claudeGatewayToken: z.string().min(16).max(128).optional(),
     // Common fields
     notifyOnHuman: z.boolean().optional(),
     notifyOnAgent: z.boolean().optional(),

@@ -52,7 +52,7 @@ import { swaggerSpec } from './config/swagger.js';
 import { apiRateLimit, authRateLimit } from './middleware/rate-limit.js';
 import { apiVersionMiddleware } from './middleware/api-version.js';
 import { apiCacheHeaders } from './middleware/cache-control.js';
-import type { AgentOutput } from './services/clawdbot-agent-service.js';
+import type { AgentOutput } from './services/claude-agent-service.js';
 import { taskArchiveRoutes } from './routes/task-archive.js';
 import { taskTimeRoutes } from './routes/task-time.js';
 import { taskRoutes } from './routes/tasks.js';

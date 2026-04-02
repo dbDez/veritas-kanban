@@ -49,8 +49,8 @@ function sanitizeFeatureSettings(settings: FeatureSettings): FeatureSettings {
   };
 
   if (sanitized.squadWebhook) {
-    if ('openclawGatewayToken' in sanitized.squadWebhook) {
-      delete sanitized.squadWebhook.openclawGatewayToken;
+    if ('claudeGatewayToken' in sanitized.squadWebhook) {
+      delete sanitized.squadWebhook.claudeGatewayToken;
     }
     if ('secret' in sanitized.squadWebhook) {
       delete sanitized.squadWebhook.secret;

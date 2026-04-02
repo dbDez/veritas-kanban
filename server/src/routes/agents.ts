@@ -1,6 +1,6 @@
 import { Router, type Router as RouterType } from 'express';
 import { z } from 'zod';
-import { ClawdbotAgentService, clawdbotAgentService } from '../services/clawdbot-agent-service.js';
+import { ClaudeAgentService, claudeAgentService } from '../services/claude-agent-service.js';
 import { getTelemetryService } from '../services/telemetry-service.js';
 import { getTaskService } from '../services/task-service.js';
 import type { AgentType, TokenTelemetryEvent } from '@veritas-kanban/shared';
@@ -31,7 +31,7 @@ const reportTokensSchema = z.object({
   agent: AgentTypeSchema.optional(),
 });
 
-// POST /api/agents/:taskId/start - Start agent on task (delegates to Clawdbot)
+// POST /api/agents/:taskId/start - Start agent on task (delegates to Claude)
 router.post(
   '/:taskId/start',
   asyncHandler(async (req, res) => {
@@ -44,12 +44,12 @@ router.post(
       }
       throw error;
     }
-    const status = await clawdbotAgentService.startAgent(req.params.taskId as string, agent);
+    const status = await claudeAgentService.startAgent(req.params.taskId as string, agent);
     res.status(201).json(status);
   })
 );
 
-// POST /api/agents/:taskId/complete - Callback from Clawdbot when agent finishes
+// POST /api/agents/:taskId/complete - Callback from Claude when agent finishes
 router.post(
   '/:taskId/complete',
   asyncHandler(async (req, res) => {
@@ -65,7 +65,7 @@ router.post(
       throw err;
     }
 
-    await clawdbotAgentService.completeAgent(req.params.taskId as string, {
+    await claudeAgentService.completeAgent(req.params.taskId as string, {
       success,
       summary,
       error,
@@ -78,7 +78,7 @@ router.post(
 router.post(
   '/:taskId/stop',
   asyncHandler(async (req, res) => {
-    await clawdbotAgentService.stopAgent(req.params.taskId as string);
+    await claudeAgentService.stopAgent(req.params.taskId as string);
     res.json({ stopped: true });
   })
 );
@@ -87,7 +87,7 @@ router.post(
 router.get(
   '/:taskId/status',
   asyncHandler(async (req, res) => {
-    const status = clawdbotAgentService.getAgentStatus(req.params.taskId as string);
+    const status = claudeAgentService.getAgentStatus(req.params.taskId as string);
     if (!status) {
       return res.json({ running: false });
     }
@@ -99,7 +99,7 @@ router.get(
 router.get(
   '/pending',
   asyncHandler(async (_req, res) => {
-    const requests = await clawdbotAgentService.listPendingRequests();
+    const requests = await claudeAgentService.listPendingRequests();
     res.json(requests);
   })
 );
@@ -108,7 +108,7 @@ router.get(
 router.get(
   '/:taskId/attempts',
   asyncHandler(async (req, res) => {
-    const attempts = await clawdbotAgentService.listAttempts(req.params.taskId as string);
+    const attempts = await claudeAgentService.listAttempts(req.params.taskId as string);
     res.json(attempts);
   })
 );
@@ -117,7 +117,7 @@ router.get(
 router.get(
   '/:taskId/attempts/:attemptId/log',
   asyncHandler(async (req, res) => {
-    const log = await clawdbotAgentService.getAttemptLog(
+    const log = await claudeAgentService.getAttemptLog(
       req.params.taskId as string,
       req.params.attemptId as string
     );
@@ -187,4 +187,4 @@ router.post(
 );
 
 // Export service for WebSocket use
-export { router as agentRoutes, clawdbotAgentService as agentService };
+export { router as agentRoutes, claudeAgentService as agentService };

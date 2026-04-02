@@ -1,10 +1,6 @@
 import type { WebSocketServer, WebSocket } from 'ws';
 import type { AnyTelemetryEvent, SquadMessage } from '@veritas-kanban/shared';
-import {
-  notifyTaskChange,
-  notifyChatMessage,
-  type TaskContext,
-} from './clawdbot-webhook-service.js';
+import { notifyTaskChange, notifyChatMessage, type TaskContext } from './claude-webhook-service.js';
 
 /**
  * Simple broadcast service that sends task change events to all connected WebSocket clients.

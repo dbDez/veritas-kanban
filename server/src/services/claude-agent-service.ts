@@ -1,5 +1,5 @@
 /**
- * ClawdbotAgentService - Delegates agent work to Clawdbot's sessions_spawn
+ * ClaudeAgentService - Delegates agent work to Claude's sessions_spawn
  *
  * Instead of managing PTY processes directly, this service:
  * 1. Sends a task request to the main Veritas session
@@ -7,7 +7,7 @@
  * 3. Sub-agent works in the task's worktree
  * 4. On completion, Veritas calls back to update the task
  *
- * This keeps agent management simple and leverages Clawdbot's existing infrastructure.
+ * This keeps agent management simple and leverages Claude's existing infrastructure.
  */
 
 import { EventEmitter } from 'events';
@@ -21,11 +21,11 @@ import { getBreaker } from './circuit-registry.js';
 import { validatePathSegment, ensureWithinBase } from '../utils/sanitize.js';
 import type { Task, AgentType, TaskAttempt, AttemptStatus } from '@veritas-kanban/shared';
 import { createLogger } from '../lib/logger.js';
-const log = createLogger('clawdbot-agent-service');
+const log = createLogger('claude-agent-service');
 
 const PROJECT_ROOT = path.resolve(process.cwd(), '..');
 const LOGS_DIR = path.join(PROJECT_ROOT, '.veritas-kanban', 'logs');
-const CLAWDBOT_GATEWAY = process.env.CLAWDBOT_GATEWAY || 'http://127.0.0.1:18789';
+const CLAUDE_GATEWAY = process.env.CLAUDE_GATEWAY || 'http://127.0.0.1:18789';
 
 export interface AgentStatus {
   taskId: string;
@@ -54,7 +54,7 @@ const pendingAgents = new Map<
   }
 >();
 
-export class ClawdbotAgentService {
+export class ClaudeAgentService {
   private configService: ConfigService;
   private taskService: TaskService;
   private logsDir: string;
@@ -75,7 +75,7 @@ export class ClawdbotAgentService {
   }
 
   /**
-   * Start an agent on a task by delegating to Clawdbot
+   * Start an agent on a task by delegating to Claude
    */
   async startAgent(taskId: string, agentType?: AgentType): Promise<AgentStatus> {
     // Get task
@@ -108,7 +108,7 @@ export class ClawdbotAgentService {
       agent = result.agent;
       routingReason = result.reason;
       log.info(
-        `[ClawdbotAgent] Routing resolved agent for task ${taskId}: ${agent} (${routingReason})`
+        `[ClaudeAgent] Routing resolved agent for task ${taskId}: ${agent} (${routingReason})`
       );
     } else {
       agent = agentType;
@@ -135,7 +135,7 @@ export class ClawdbotAgentService {
     validatePathSegment(taskId);
     validatePathSegment(attemptId);
 
-    // Build the task prompt for Clawdbot
+    // Build the task prompt for Claude
     const worktreePath = this.expandPath(task.git.worktreePath);
     const taskPrompt = this.buildTaskPrompt(task, worktreePath, attemptId);
 
@@ -156,11 +156,11 @@ export class ClawdbotAgentService {
       attempt,
     });
 
-    // Send request to Clawdbot main session (wrapped in circuit breaker)
+    // Send request to Claude main session (wrapped in circuit breaker)
     // This will be picked up by Veritas who will spawn the actual sub-agent
     const agentBreaker = getBreaker('agent');
     try {
-      await agentBreaker.execute(() => this.sendToClawdbot(taskPrompt, taskId, attemptId));
+      await agentBreaker.execute(() => this.sendToClaude(taskPrompt, taskId, attemptId));
     } catch (error: any) {
       // Clean up on failure
       pendingAgents.delete(taskId);
@@ -168,7 +168,7 @@ export class ClawdbotAgentService {
         status: 'todo',
         attempt: { ...attempt, status: 'failed', ended: new Date().toISOString() },
       });
-      throw new Error(`Failed to start agent via Clawdbot: ${error.message}`);
+      throw new Error(`Failed to start agent via Claude: ${error.message}`);
     }
 
     return {
@@ -181,10 +181,10 @@ export class ClawdbotAgentService {
   }
 
   /**
-   * Send task request to Clawdbot main session
+   * Send task request to Claude main session
    * Uses the webchat API endpoint
    */
-  private async sendToClawdbot(prompt: string, taskId: string, attemptId: string): Promise<void> {
+  private async sendToClaude(prompt: string, taskId: string, attemptId: string): Promise<void> {
     // Validate path segments to prevent directory traversal
     validatePathSegment(taskId);
     validatePathSegment(attemptId);
@@ -212,14 +212,14 @@ export class ClawdbotAgentService {
       )
     );
 
-    log.info(`[ClawdbotAgent] Wrote agent request for task ${taskId} to ${requestFile}`);
+    log.info(`[ClaudeAgent] Wrote agent request for task ${taskId} to ${requestFile}`);
     log.info(
-      `[ClawdbotAgent] Veritas should pick this up on next heartbeat or you can trigger manually`
+      `[ClaudeAgent] Veritas should pick this up on next heartbeat or you can trigger manually`
     );
   }
 
   /**
-   * Handle completion callback from Clawdbot sub-agent
+   * Handle completion callback from Claude sub-agent
    */
   async completeAgent(
     taskId: string,
@@ -227,7 +227,7 @@ export class ClawdbotAgentService {
   ): Promise<void> {
     const pending = pendingAgents.get(taskId);
     if (!pending) {
-      log.warn(`[ClawdbotAgent] Received completion for unknown task ${taskId}`);
+      log.warn(`[ClaudeAgent] Received completion for unknown task ${taskId}`);
       return;
     }
 
@@ -271,7 +271,7 @@ export class ClawdbotAgentService {
       // Ignore if already deleted
     }
 
-    log.info(`[ClawdbotAgent] Task ${taskId} completed with status: ${status}`);
+    log.info(`[ClaudeAgent] Task ${taskId} completed with status: ${status}`);
   }
 
   /**
@@ -424,7 +424,7 @@ If you encounter errors, call with \`success: false\` and include the error mess
     const header = `# Agent Log: ${task.title}
 
 **Task ID:** ${task.id}
-**Agent:** ${agent} (via Clawdbot)
+**Agent:** ${agent} (via Claude)
 **Started:** ${new Date().toISOString()}
 **Worktree:** ${task.git?.worktreePath}
 
@@ -436,7 +436,7 @@ ${prompt}
 
 ## Progress
 
-*Agent is working via Clawdbot sub-agent...*
+*Agent is working via Claude sub-agent...*
 
 `;
     await fs.writeFile(logPath, header, 'utf-8');
@@ -444,4 +444,4 @@ ${prompt}
 }
 
 // Export singleton
-export const clawdbotAgentService = new ClawdbotAgentService();
+export const claudeAgentService = new ClaudeAgentService();

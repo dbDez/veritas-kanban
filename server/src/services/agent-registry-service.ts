@@ -49,7 +49,7 @@ export interface RegisteredAgent {
   currentTaskId?: string;
   /** Current task title */
   currentTaskTitle?: string;
-  /** Session key (for OpenClaw/orchestrator integration) */
+  /** Session key (for Claude/orchestrator integration) */
   sessionKey?: string;
 }
 

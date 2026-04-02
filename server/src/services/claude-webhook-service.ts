@@ -1,7 +1,7 @@
 /**
- * Clawdbot Webhook Service
+ * Claude Webhook Service
  *
- * Sends task and chat events to a configured webhook URL (e.g. Clawdbot Gateway)
+ * Sends task and chat events to a configured webhook URL (e.g. Claude Gateway)
  * so an AI agent can react in real-time instead of polling.
  *
  * Features:

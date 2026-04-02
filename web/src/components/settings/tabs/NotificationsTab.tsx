@@ -94,7 +94,7 @@ export function NotificationsTab() {
       <div className="space-y-4">
         <SectionHeader title="Squad Chat Webhook" />
         <p className="text-sm text-muted-foreground -mt-2">
-          Fire HTTP webhooks or OpenClaw wake calls when squad messages are posted
+          Fire HTTP webhooks or Claude gateway wake calls when squad messages are posted
         </p>
         <div className="divide-y">
           <ToggleRow
@@ -114,7 +114,7 @@ export function NotificationsTab() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="webhook">Generic Webhook</SelectItem>
-                    <SelectItem value="openclaw">OpenClaw Direct</SelectItem>
+                    <SelectItem value="claude">Claude Gateway</SelectItem>
                   </SelectContent>
                 </Select>
               </SettingRow>
@@ -148,15 +148,15 @@ export function NotificationsTab() {
                 </>
               )}
 
-              {webhookMode === 'openclaw' && (
+              {webhookMode === 'claude' && (
                 <>
                   <SettingRow
                     label="Gateway URL"
-                    description="OpenClaw gateway endpoint (e.g., http://127.0.0.1:18789)"
+                    description="Claude gateway endpoint (e.g., http://127.0.0.1:18789)"
                   >
                     <Input
-                      value={settings.squadWebhook?.openclawGatewayUrl ?? ''}
-                      onChange={(e) => updateSquadWebhook('openclawGatewayUrl', e.target.value)}
+                      value={settings.squadWebhook?.claudeGatewayUrl ?? ''}
+                      onChange={(e) => updateSquadWebhook('claudeGatewayUrl', e.target.value)}
                       placeholder="http://127.0.0.1:18789"
                       className="w-96 h-8 text-xs"
                       type="url"
@@ -164,11 +164,11 @@ export function NotificationsTab() {
                   </SettingRow>
                   <SettingRow
                     label="Gateway Token"
-                    description="OpenClaw gateway authorization token"
+                    description="Claude gateway authorization token"
                   >
                     <Input
-                      value={settings.squadWebhook?.openclawGatewayToken ?? ''}
-                      onChange={(e) => updateSquadWebhook('openclawGatewayToken', e.target.value)}
+                      value={settings.squadWebhook?.claudeGatewayToken ?? ''}
+                      onChange={(e) => updateSquadWebhook('claudeGatewayToken', e.target.value)}
                       placeholder="your-gateway-token"
                       className="w-96 h-8 text-xs"
                       type="password"

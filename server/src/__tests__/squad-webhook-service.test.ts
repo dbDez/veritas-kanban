@@ -84,7 +84,7 @@ describe('squad webhook service', () => {
     });
   });
 
-  it('fires OpenClaw wake call and validates url', async () => {
+  it('fires Claude gateway wake call and validates url', async () => {
     fetchSpy.mockResolvedValue({ ok: true, status: 200, statusText: 'OK' });
     const mod = await import('../services/squad-webhook-service.js');
 
@@ -100,9 +100,9 @@ describe('squad webhook service', () => {
         enabled: true,
         notifyOnHuman: true,
         notifyOnAgent: true,
-        mode: 'openclaw',
-        openclawGatewayUrl: 'https://gateway.test',
-        openclawGatewayToken: 'token',
+        mode: 'claude',
+        claudeGatewayUrl: 'https://gateway.test',
+        claudeGatewayToken: 'token',
       } as any
     );
 
@@ -115,7 +115,7 @@ describe('squad webhook service', () => {
     });
   });
 
-  it('skips invalid OpenClaw or incomplete config and tolerates failed responses', async () => {
+  it('skips invalid Claude gateway or incomplete config and tolerates failed responses', async () => {
     const mod = await import('../services/squad-webhook-service.js');
     const msg = {
       id: 'm1',
@@ -128,16 +128,16 @@ describe('squad webhook service', () => {
       enabled: true,
       notifyOnHuman: true,
       notifyOnAgent: true,
-      mode: 'openclaw',
+      mode: 'claude',
     } as any);
     mockValidateWebhookUrl.mockReturnValue({ valid: false, reason: 'ssrf' });
     await mod.fireSquadWebhook(msg, {
       enabled: true,
       notifyOnHuman: true,
       notifyOnAgent: true,
-      mode: 'openclaw',
-      openclawGatewayUrl: 'https://bad.test',
-      openclawGatewayToken: 'token',
+      mode: 'claude',
+      claudeGatewayUrl: 'https://bad.test',
+      claudeGatewayToken: 'token',
     } as any);
     expect(fetchSpy).not.toHaveBeenCalled();
 

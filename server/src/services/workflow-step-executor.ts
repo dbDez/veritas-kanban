@@ -1,6 +1,6 @@
 /**
  * WorkflowStepExecutor — Executes individual workflow steps
- * Phase 1: Core Engine (agent steps only, OpenClaw integration placeholder)
+ * Phase 1: Core Engine (agent steps only, Claude Gateway integration placeholder)
  */
 
 import fs from 'fs/promises';
@@ -49,7 +49,7 @@ export class WorkflowStepExecutor {
   }
 
   /**
-   * Execute an agent step (spawns OpenClaw session)
+   * Execute an agent step (spawns Claude session)
    * Integrated features: #108 (progress), #110 (tool policies), #111 (session management)
    */
   private async executeAgentStep(
@@ -90,9 +90,9 @@ export class WorkflowStepExecutor {
       'Agent step execution configured'
     );
 
-    // TODO: OpenClaw integration (sessions_spawn)
+    // TODO: Claude Gateway integration (sessions_spawn)
     // This is the placeholder for actual session spawning.
-    // When OpenClaw sessions API is integrated, replace this with:
+    // When Claude Gateway sessions API is integrated, replace this with:
     //
     // if (sessionConfig.mode === 'reuse') {
     //   const lastSessionKey = run.context._sessions?.[step.agent!];
@@ -624,7 +624,7 @@ export class WorkflowStepExecutor {
     );
 
     // Execute all sub-steps in parallel using Promise.allSettled
-    // Note: For production use with real OpenClaw sessions, consider batching to limit
+    // Note: For production use with real Claude sessions, consider batching to limit
     // concurrent session spawns (e.g., p-limit library with concurrency: 10)
     const subStepPromises = subSteps.map((subStep) =>
       this.executeParallelSubStep(subStep, run, contextWithProgress, step.id)
@@ -778,11 +778,11 @@ export class WorkflowStepExecutor {
   }
 
   /**
-   * Cleanup OpenClaw session (Phase 2 tracked in #110)
+   * Cleanup Claude session (Phase 2 tracked in #110)
    */
   async cleanupSession(sessionKey: string): Promise<void> {
     log.info({ sessionKey }, 'Session cleanup (placeholder)');
-    // Phase 2 (tracked in #110): Call OpenClaw session cleanup API
+    // Phase 2 (tracked in #110): Call Claude Gateway session cleanup API
     // Will integrate with sessions API for proper resource cleanup
   }
 
@@ -1011,7 +1011,7 @@ export class WorkflowStepExecutor {
 
   /**
    * Get tool policy filter for an agent role (#110)
-   * Returns tool restrictions to pass to OpenClaw session spawn
+   * Returns tool restrictions to pass to Claude Gateway session spawn
    */
   private async getToolPolicyForAgent(agentDef: WorkflowAgent | null): Promise<{
     allowed?: string[];

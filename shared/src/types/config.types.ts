@@ -318,15 +318,15 @@ export interface DelegationScope {
 /** Squad webhook settings */
 export interface SquadWebhookSettings {
   enabled: boolean;
-  mode: 'webhook' | 'openclaw'; // 'webhook' = generic HTTP POST, 'openclaw' = gateway wake
+  mode: 'webhook' | 'claude'; // 'webhook' = generic HTTP POST, 'claude' = gateway wake
   // Generic webhook fields:
   url?: string; // Where to POST notifications
   secret?: string; // Optional HMAC signing secret for verification
   notifyOnHuman: boolean; // Fire webhook when human posts (default: true)
   notifyOnAgent: boolean; // Fire webhook when agent posts (default: false)
-  // OpenClaw fields:
-  openclawGatewayUrl?: string; // e.g., "http://127.0.0.1:18789"
-  openclawGatewayToken?: string; // Auth token
+  // Claude Gateway fields:
+  claudeGatewayUrl?: string; // e.g., "http://127.0.0.1:18789"
+  claudeGatewayToken?: string; // Auth token
 }
 
 /** All feature settings combined */
@@ -453,7 +453,7 @@ export const DEFAULT_FEATURE_SETTINGS: FeatureSettings = {
     url: '',
     notifyOnHuman: true,
     notifyOnAgent: false,
-    openclawGatewayUrl: '',
-    openclawGatewayToken: '',
+    claudeGatewayUrl: '',
+    claudeGatewayToken: '',
   },
 };

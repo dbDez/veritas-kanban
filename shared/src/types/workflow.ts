@@ -131,7 +131,7 @@ export interface StepRun {
   stepId: string;
   status: StepRunStatus;
   agent?: string;
-  sessionKey?: string; // OpenClaw session key
+  sessionKey?: string; // Claude session key
   startedAt?: string;
   completedAt?: string;
   duration?: number; // seconds

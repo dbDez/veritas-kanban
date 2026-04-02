@@ -1,5 +1,5 @@
 /**
- * Clawdbot Webhook Service Tests
+ * Claude Webhook Service Tests
  *
  * Tests payload formatting, HMAC signing, delivery logic, and retry behaviour.
  */
@@ -13,7 +13,7 @@ import {
   notifyChatMessage,
   type WebhookTaskPayload,
   type WebhookChatPayload,
-} from '../services/clawdbot-webhook-service.js';
+} from '../services/claude-webhook-service.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -30,7 +30,7 @@ function mockFetch(response: { ok: boolean; status?: number } = { ok: true, stat
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('ClawdbotWebhookService', () => {
+describe('ClaudeWebhookService', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     // Clear env overrides

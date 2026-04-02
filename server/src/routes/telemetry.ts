@@ -29,7 +29,7 @@ const router: RouterType = Router();
 
 /**
  * POST /api/telemetry/events
- * Ingest telemetry events from external sources (Veritas, Clawdbot, etc.)
+ * Ingest telemetry events from external sources (Veritas, Claude Gateway, etc.)
  *
  * Accepts: run.started, run.completed, run.error, run.tokens events
  *

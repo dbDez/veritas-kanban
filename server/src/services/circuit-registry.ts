@@ -76,7 +76,7 @@ getBreaker('github', {
   monitorWindow: 60_000,
 });
 
-// Clawdbot agent service — may be down if Clawdbot gateway is offline
+// Claude agent service — may be down if Claude gateway is offline
 getBreaker('agent', {
   failureThreshold: 3,
   resetTimeout: 20_000,

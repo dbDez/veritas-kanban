@@ -109,8 +109,8 @@ export const envSchema = z.object({
   TELEMETRY_COMPRESS_DAYS: positiveIntString,
 
   // ── External Services ───────────────────────────────────────────────
-  /** Clawdbot gateway URL */
-  CLAWDBOT_GATEWAY: z.string().url().optional().default('http://127.0.0.1:18789'),
+  /** Claude gateway URL */
+  CLAUDE_GATEWAY: z.string().url().optional().default('http://127.0.0.1:18789'),
 });
 
 // ---------------------------------------------------------------------------

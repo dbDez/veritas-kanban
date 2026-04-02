@@ -1,0 +1,13 @@
+{
+  "name": "claude-gateway",
+  "version": "1.0.0",
+  "description": "Local WebSocket gateway — routes Veritas Kanban Board Chat to Claude Code agents",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.20.0"
+  }
+}

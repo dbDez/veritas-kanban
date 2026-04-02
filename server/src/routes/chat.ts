@@ -118,7 +118,7 @@ router.post(
       message: 'Message sent — agent response incoming',
     });
 
-    // Trigger async AI response via Clawdbot Gateway
+    // Trigger async AI response via Claude Gateway
     const gatewaySessionKey = `kanban-chat-${sessionId}`;
 
     sendGatewayChat(input.message, gatewaySessionKey, {

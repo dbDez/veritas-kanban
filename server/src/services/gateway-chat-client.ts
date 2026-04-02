@@ -1,7 +1,7 @@
 /**
  * Gateway Chat Client
  *
- * Connects to the Clawdbot Gateway WebSocket to proxy chat messages.
+ * Connects to the Claude Gateway WebSocket to proxy chat messages.
  * Handles authentication, message sending, and response collection.
  */
 
@@ -11,7 +11,7 @@ import { createLogger } from '../lib/logger.js';
 
 const log = createLogger('gateway-chat');
 
-const GATEWAY_URL = process.env.CLAWDBOT_GATEWAY || 'http://127.0.0.1:18789';
+const GATEWAY_URL = process.env.CLAUDE_GATEWAY || 'http://127.0.0.1:18789';
 const PROTOCOL_VERSION = 3;
 const CONNECT_TIMEOUT_MS = 10_000;
 const RESPONSE_TIMEOUT_MS = 120_000; // 2 minutes for AI response
@@ -21,7 +21,7 @@ let cachedToken: string | null = null;
 
 function getToken(): string {
   if (cachedToken) return cachedToken;
-  return process.env.CLAWDBOT_GATEWAY_TOKEN || '';
+  return process.env.CLAUDE_GATEWAY_TOKEN || '';
 }
 
 interface ChatResponse {
@@ -37,7 +37,7 @@ interface StreamCallbacks {
 }
 
 /**
- * Send a message to the Clawdbot Gateway and collect the response.
+ * Send a message to the Claude Gateway and collect the response.
  * Opens a temporary WebSocket connection for each request.
  */
 export async function sendGatewayChat(
@@ -249,29 +249,13 @@ export async function sendGatewayChat(
 }
 
 /**
- * Load the gateway token from config file if not in env
+ * Load the gateway token from env
  */
 export async function loadGatewayToken(): Promise<string> {
   if (cachedToken) return cachedToken;
-  if (process.env.CLAWDBOT_GATEWAY_TOKEN) {
-    cachedToken = process.env.CLAWDBOT_GATEWAY_TOKEN;
+  if (process.env.CLAUDE_GATEWAY_TOKEN) {
+    cachedToken = process.env.CLAUDE_GATEWAY_TOKEN;
     return cachedToken;
-  }
-
-  try {
-    const fs = await import('fs/promises');
-    const path = await import('path');
-    const configPath = path.join(process.env.HOME || '', '.clawdbot', 'clawdbot.json');
-    const raw = await fs.readFile(configPath, 'utf-8');
-    const config = JSON.parse(raw);
-    const token = config?.gateway?.auth?.token;
-    if (token) {
-      cachedToken = token;
-      process.env.CLAWDBOT_GATEWAY_TOKEN = token;
-      return token;
-    }
-  } catch (err: any) {
-    log.warn({ err: err.message }, 'Failed to load gateway token from config');
   }
 
   return '';
